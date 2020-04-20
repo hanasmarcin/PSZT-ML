@@ -1,9 +1,9 @@
 import numpy as np
-
+from cec17_functions import cec17_test_func
 
 class ModifiedEvolutionaryAlgorithm:
 
-    def __init__(self, population, evaluation_function, lmbd):
+    def __init__(self, population, evaluation_function, CEC_function_number, lmbd):
         """
         Constructor for EvolutionaryAlgorithm
         :param population: array sized mi*2*2d, where mi is a population size and d is a dimension of population
@@ -16,6 +16,7 @@ class ModifiedEvolutionaryAlgorithm:
         assert population.shape[1] == 2
         self.P = population
         self.J = evaluation_function
+        self.nCEC = CEC_function_number
         self.lmbd = int(lmbd)
         self.mi = int(self.P.shape[0]*2)
         self.d = int(self.P.shape[2]/2)
@@ -74,7 +75,7 @@ class ModifiedEvolutionaryAlgorithm:
         eval_values = np.empty(population.shape[0])
         i = 0
         for individual in population:
-            eval_values[i] = (self.J(individual[0:self.d, 0]) + self.J(individual[0:self.d, 1])) / 2
+            eval_values[i] = (self.J(individual[0:self.d, 0], self.nCEC) + self.J(individual[0:self.d, 1], self.nCEC)) / 2
             i = i+1
 
         sorted_population = population[np.argsort(eval_values)]
@@ -109,11 +110,33 @@ class ModifiedEvolutionaryAlgorithm:
         return mutated_x
 
 
-def evaluate(args):
-    return sum(-(args + 5) ** 2)
+def evaluate(args,func_num):
+    # nx: Number of dimensions
+    nx = len(args)
+    # mx: Number of objective functions
+    mx = 1
+    # Pointer for the calculated fitness
+    f = [0]
+    
+    cec17_test_func(args, f, nx, mx, func_num)
 
+    return f[0]
 
-pop = np.array([[[1, 2, 3, 4], [4, 5, 6, 7]], [[7, 8, 9, 10], [10, 11, 12, 13]], [[13, 14, 15, 16], [16, 17, 18, 19]]])
-evAlg = ModifiedEvolutionaryAlgorithm(pop, evaluate, 10)
-for i in range(100):
+CEC_function_number = int(input("Enter the CEC 2017 function number: "))
+dimensions = int(input("Enter number of dimensions: "))
+
+while (dimensions != 2 and dimensions != 10 and dimensions != 20 and dimensions != 30 and dimensions != 50 and dimensions != 100):
+    print("Error: Test functions are only defined for D=2,10,20,30,50,100.")
+    dimensions = int(input("Please enter number of dimensions again: "))
+    
+lambdaa = 10
+initial_population_size = 6
+
+random_initial_population=1000*np.random.rand( int(initial_population_size/2), 2, 2*dimensions)
+
+#print( random_initial_population )
+
+evAlg = ModifiedEvolutionaryAlgorithm(random_initial_population, evaluate, CEC_function_number, lambdaa)
+
+for i in range(int(1000*dimensions/lambdaa)):
     evAlg.iteration()
