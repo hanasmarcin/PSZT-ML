@@ -31,12 +31,11 @@ iteration_count = int(1000*dimensions/lambdaa)
 # Randomization of the initial population for modified evolutionary algorithm
 m_random_initial_population=1000*np.random.rand( int(initial_population_size/2), 2, 2*dimensions)
 # 
-print(random_initial_population)
 
-for i in range(0):
+for i in range(3):
     print("TEST: ", i)
     modEvAlg = ModifiedEvolutionaryAlgorithm(m_random_initial_population, evaluate, CEC_function_number, lambdaa, iteration_count)
-    evAlg = EvolutionaryAlgorithm(e_random_initial_population, evaluate, CEC_function_number, lambdaa, iteration_count)
+    #evAlg = EvolutionaryAlgorithm(e_random_initial_population, evaluate, CEC_function_number, lambdaa, iteration_count)
     
     print(modEvAlg.run())
 

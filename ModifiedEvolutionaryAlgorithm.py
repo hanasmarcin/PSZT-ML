@@ -50,8 +50,10 @@ class ModifiedEvolutionaryAlgorithm:
         R = np.empty([self.lmbd, self.d * 2])
 
         for i in range(0, self.lmbd, 2):
-            R[i, :] = self.mutate(T[i, 0])
-            R[i+1, :] = self.mutate(T[i, 1])
+            print(self.lmbd)
+            print(i)
+            R[i, :] = self.mutate(T[int(i/2), 0])
+            R[i+1, :] = self.mutate(T[int(i/2), 1])
 
         return R
 
