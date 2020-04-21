@@ -1,5 +1,4 @@
 import numpy as np
-from cec17_functions import cec17_test_func
 
 class ModifiedEvolutionaryAlgorithm:
 
@@ -81,7 +80,7 @@ class ModifiedEvolutionaryAlgorithm:
         sorted_population = population[np.argsort(eval_values)]
         #print(population[np.argsort(eval_values)])
         return sorted_population[-int(self.mi/2):]
-
+        
     @staticmethod
     def crossover(f, m):
         """
@@ -111,37 +110,6 @@ class ModifiedEvolutionaryAlgorithm:
 
     def run(self):
         for i in range(self.iter_count):
-            evAlg.iteration()
-        
-        return 0# najmniejsza wartosc z P
-
-
-def evaluate(args,func_num):
-    # nx: Number of dimensions
-    nx = len(args)
-    # mx: Number of objective functions
-    mx = 1
-    # Pointer for the calculated fitness
-    f = [0]
+            self.iteration()
     
-    cec17_test_func(args, f, nx, mx, func_num)
-
-    return f[0]
-
-CEC_function_number = int(input("Enter the CEC 2017 function number: "))
-dimensions = int(input("Enter number of dimensions: "))
-
-while (dimensions != 2 and dimensions != 10 and dimensions != 20 and dimensions != 30 and dimensions != 50 and dimensions != 100):
-    print("Error: Test functions are only defined for D=2,10,20,30,50,100.")
-    dimensions = int(input("Please enter number of dimensions again: "))
-    
-lambdaa = 10
-initial_population_size = 6
-
-random_initial_population=1000*np.random.rand( int(initial_population_size/2), 2, 2*dimensions)
-
-iteration_count = int(1000*dimensions/lambdaa)
-
-evAlg = ModifiedEvolutionaryAlgorithm(random_initial_population, evaluate, CEC_function_number, lambdaa, iteration_count)
-
-print(evAlg.run())
+        return self.P[-1:]

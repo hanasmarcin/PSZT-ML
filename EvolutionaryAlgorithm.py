@@ -1,9 +1,8 @@
 import numpy as np
 
-
 class EvolutionaryAlgorithm:
 
-    def __init__(self, population, evaluation_function, lmbd):
+    def __init__(self, population, evaluation_function, CEC_function_number, lmbd, iter_count):
         """
         Constructor for EvolutionaryAlgorithm
         :param population: array sized mi*2d, where mi is a population size and d is a dimension of population
@@ -15,7 +14,9 @@ class EvolutionaryAlgorithm:
         """
         self.P = population
         self.J = evaluation_function
+        self.nCEC = CEC_function_number
         self.lmbd = int(lmbd)
+        self.iter_count = int(iter_count)
         self.mi = int(self.P.shape[0])
         self.d = int(self.P.shape[1]/2)
         self.tau = 1/np.sqrt(2*self.d)
@@ -55,7 +56,7 @@ class EvolutionaryAlgorithm:
         population = np.empty([self.P.shape[0] + R.shape[0], 2*self.d + 1])
         i = 0
         for individual in np.vstack([self.P, R]):
-            population[i, 0] = self.J(individual[0:self.d])
+            population[i, 0] = self.J(individual[0:self.d], self.nCEC)
             population[i, 1:] = individual
             i = i+1
 
@@ -95,12 +96,8 @@ class EvolutionaryAlgorithm:
 
         return mutated_x
 
-
-def evaluate(args):
-    return sum(-(args + 5) ** 2)
-
-
-pop = np.array([[1, 2, 3, 4], [4, 5, 6, 7], [7, 8, 9, 10], [10, 11, 12, 13], [13, 14, 15, 16], [16, 17, 18, 19]])
-evAlg = EvolutionaryAlgorithm(pop, evaluate, 10)
-for i in range(100):
-    evAlg.iteration()
+    def run(self):
+        for i in range(self.iter_count):
+            self.iteration()
+    
+        return self.P[-1:]
