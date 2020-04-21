@@ -50,8 +50,8 @@ class ModifiedEvolutionaryAlgorithm:
         R = np.empty([self.lmbd, self.d * 2])
 
         for i in range(0, self.lmbd, 2):
-            print(self.lmbd)
-            print(i)
+            #print(self.lmbd)
+            #print(i)
             R[i, :] = self.mutate(T[int(i/2), 0])
             R[i+1, :] = self.mutate(T[int(i/2), 1])
 
@@ -76,13 +76,33 @@ class ModifiedEvolutionaryAlgorithm:
         eval_values = np.empty(population.shape[0])
         i = 0
         for individual in population:
-            eval_values[i] = (self.J(individual[0:self.d, 0], self.nCEC) + self.J(individual[0:self.d, 1], self.nCEC)) / 2
+            eval_values[i] = (self.J(individual[0, 0:self.d], self.nCEC) + self.J(individual[1, 0:self.d], self.nCEC)) / 2
             i = i+1
 
         sorted_population = population[np.argsort(eval_values)]
         #print(population[np.argsort(eval_values)])
         return sorted_population[-int(self.mi/2):]
-        
+
+    def choose_best(self):
+        # Final population without pairs
+        end_pop = np.empty([self.P.shape[0] * 2, 2 * self.d])
+        i = 0
+        for individual in self.P:
+            end_pop[i] = individual[0, 0:2 * self.d]
+            end_pop[i + 1] = individual[1, 0:2 * self.d]
+            i = i + 2
+
+        # Sorting final population
+        population = np.empty([end_pop.shape[0], 2 * self.d + 1])
+        i = 0
+        for individual in end_pop:
+            population[i, 0] = self.J(individual[0:self.d], self.nCEC)
+            population[i, 1:] = individual
+            i = i + 1
+        sorted_population = population[np.argsort(population[:, 0])]
+
+        return sorted_population[-1, 1:]
+
     # @staticmethod
     # def crossover(f, m):
     #     """
@@ -113,5 +133,5 @@ class ModifiedEvolutionaryAlgorithm:
     def run(self):
         for i in range(self.iter_count):
             self.iteration()
-    
-        return self.P[-1:]
+
+        return self.choose_best()

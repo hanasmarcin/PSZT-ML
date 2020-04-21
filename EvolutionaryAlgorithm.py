@@ -61,13 +61,14 @@ class EvolutionaryAlgorithm:
             i = i+1
 
         sorted_population = population[np.argsort(population[:, 0])]
+
         return sorted_population[-self.mi:, 1:]
 
     def iteration(self):
         T = self.generate_T()
         R = self.reproduce(T)
         self.P = self.choose_mi_best(R)
-        print(self.P)
+        #print(self.P)
 
     @staticmethod
     def crossover(f, m):
@@ -99,5 +100,5 @@ class EvolutionaryAlgorithm:
     def run(self):
         for i in range(self.iter_count):
             self.iteration()
-    
-        return self.P[-1:]
+
+        return  self.P[-1]
