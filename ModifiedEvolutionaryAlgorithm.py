@@ -33,9 +33,9 @@ class ModifiedEvolutionaryAlgorithm:
         Function generates temporary population, which will be reproduced
         :return: temporary population
         """
-        T = np.empty([self.lmbd, 2, self.d * 2])
+        T = np.empty([int(self.lmbd/2), 2, self.d * 2])
         # loop for sampling (with replacement) lambda pairs to reproduce
-        for i in range(self.lmbd):
+        for i in range(int(self.lmbd/2)):
             random_id = np.random.randint(low=0, high=int(self.mi/2-1))
             T[i, :, :] = self.P[random_id, :, :]
 
@@ -43,15 +43,15 @@ class ModifiedEvolutionaryAlgorithm:
 
     def reproduce(self, T):
         """
-        Function creates new individuals from T by crossover and mutation
+        Function creates new individuals from T by mutation
         :return:
         """
 
         R = np.empty([self.lmbd, self.d * 2])
 
-        for i in range(0, self.lmbd):
-            x = self.crossover(T[i, 0], T[i, 1])
-            R[i, :] = self.mutate(x)
+        for i in range(0, self.lmbd, 2):
+            R[i, :] = self.mutate(T[i, 0])
+            R[i+1, :] = self.mutate(T[i, 1])
 
         return R
 
@@ -81,18 +81,18 @@ class ModifiedEvolutionaryAlgorithm:
         #print(population[np.argsort(eval_values)])
         return sorted_population[-int(self.mi/2):]
         
-    @staticmethod
-    def crossover(f, m):
-        """
-        Function makes new individual by crossover on its parents f and m
-        :param f: first parent, matrix sized 1*2d, first d rows are values of each individual and second d rows are
-        coefficients for normal distribution for each individual's value
-        :param m: second parent, matrix sized 1*2d, first d rows are values of each individual and second d rows are
-        coefficients for normal distribution for each individual's value
-        :return: new individual
-        """
-        x = (f + m) / 2
-        return x
+    # @staticmethod
+    # def crossover(f, m):
+    #     """
+    #     Function makes new individual by crossover on its parents f and m
+    #     :param f: first parent, matrix sized 1*2d, first d rows are values of each individual and second d rows are
+    #     coefficients for normal distribution for each individual's value
+    #     :param m: second parent, matrix sized 1*2d, first d rows are values of each individual and second d rows are
+    #     coefficients for normal distribution for each individual's value
+    #     :return: new individual
+    #     """
+    #     x = (f + m) / 2
+    #     return x
 
     def mutate(self, x):
         ksi = np.random.normal(0, 1)
