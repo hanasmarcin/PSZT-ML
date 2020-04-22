@@ -2,6 +2,7 @@ import numpy as np
 from ModifiedEvolutionaryAlgorithm import ModifiedEvolutionaryAlgorithm 
 from EvolutionaryAlgorithm import EvolutionaryAlgorithm 
 from cec17_functions import cec17_test_func
+import matplotlib.pyplot as plt
 
 # Evaluate function from CEC17 functions 
 def evaluate(args,func_num):
@@ -29,7 +30,7 @@ initial_population_size = 40
 iteration_count = int(1000*dimensions/lambdaa)
 print("iteration count: {}".format(iteration_count))
 # Variables for statistics
-i_count = 10
+i_count = 20
 best_ev = np.zeros([i_count, dimensions])
 best_mod = np.zeros([i_count, dimensions])
 best_ev_val = np.zeros(i_count)
@@ -41,7 +42,7 @@ for k in range(i_count):
 
     # Population for one test
     ## Randomization of the initial population for modified evolutionary algorithm (pairs)
-    m_random_initial_population = 1000 * np.random.rand(int(initial_population_size / 2), 2, 2 * dimensions)
+    m_random_initial_population = 10000 * np.random.rand(int(initial_population_size / 2), 2, 2 * dimensions)
     ## Initial population for evolutionary algorithm (no pairs, but the same for both algorithms)
     e_random_initial_population = np.empty([m_random_initial_population.shape[0] * 2, 2 * dimensions])
     i = 0
@@ -54,24 +55,27 @@ for k in range(i_count):
     evAlg = EvolutionaryAlgorithm(e_random_initial_population, evaluate, CEC_function_number, lambdaa, iteration_count)
     best_ev[k] = evAlg.run()
     best_ev_val[k] = evaluate(best_ev[k], CEC_function_number)
-    # print("Evolutionary Algorithm:\n \n\t-Best:")
-    # print(best_ev[k])
-    # print("\n\t-Value of evaluate function:")
-    # print("\t{}".format(best_ev_val[k]))
+    print("Evolutionary Algorithm:\n \n\t-Best:")
+    print(best_ev[k])
+    print("\n\t-Value of evaluate function:")
+    print("\t{}".format(best_ev_val[k]))
 
     # Modified Evolutionary Algorithm
     modEvAlg = ModifiedEvolutionaryAlgorithm(m_random_initial_population, evaluate, CEC_function_number, lambdaa, iteration_count)
     best_mod[k] = modEvAlg.run()
     best_mod_val[k] = evaluate(best_mod[k], CEC_function_number)
-    # print("\nModified Evolutionary Algorithm:\n \n\t-Best:")
-    # print(best_mod[k])
-    # print("\n\t-Value of evaluate function:")
-    # print("\t{}".format(best_mod_val[k]))
+    print("\nModified Evolutionary Algorithm:\n \n\t-Best:")
+    print(best_mod[k])
+    print("\n\t-Value of evaluate function:")
+    print("\t{}".format(best_mod_val[k]))
 
 # Show statistics
 print("\n///////AVERAGES///////\n")
 
 print("Evolutionary Algorithm:\n \n\t-Average of bests:")
+
+plt.plot(best_ev[:, 0], best_ev[:, 1], 'ro')
+plt.show()
 print(np.mean(best_ev, axis=0))
 print(np.std(best_ev, axis=0))
 print("\n\t-Average and standard deviation of evaluate function:")
@@ -79,6 +83,8 @@ print("\t{}".format(np.mean(best_ev_val)))
 print("\t{}".format(np.std(best_ev_val)))
 
 print("\nModified Evolutionary Algorithm:\n \n\t-Average of bests:")
+plt.plot(best_mod[:, 0], best_mod[:, 1], 'ro')
+plt.show()
 print(np.mean(best_mod, axis=0))
 print(np.std(best_mod, axis=0))
 print("\n\t-Average and standard deviation of evaluate function:")

@@ -1,4 +1,5 @@
 import numpy as np
+import matplotlib.pyplot as plt
 
 class EvolutionaryAlgorithm:
 
@@ -50,7 +51,7 @@ class EvolutionaryAlgorithm:
 
     def choose_mi_best(self, R):
         """
-        Method creates new population by choosing mi best individuals from children or current population
+        Method creates new population by choosing mi best individuals from children and current population
         :param R: children population (array sized lambda x 2d)
         :return: new population (array sized mi x 2d)
         """
@@ -109,9 +110,12 @@ class EvolutionaryAlgorithm:
     def run(self):
         """
         Method runs algorithm
-        :return: best individual (array sized 1 x 2d)
+        :return: best individual (array sized 1 x d)
         """
         for i in range(self.iter_count):
             self.iteration()
 
+        print(self.P[:, 0:self.d])
+        plt.plot(self.P[:, 1], self.P[:, 2], 'ro')
+        plt.show()
         return  self.P[-1, 0:self.d]
