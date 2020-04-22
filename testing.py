@@ -28,6 +28,7 @@ lambdaa = 60
 initial_population_size = 40
 iteration_count = int(1000*dimensions/lambdaa)
 print("iteration count: {}".format(iteration_count))
+
 # Variables for statistics
 i_count = 10
 best_ev = np.zeros([i_count, dimensions])
