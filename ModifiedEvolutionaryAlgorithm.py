@@ -24,14 +24,17 @@ class ModifiedEvolutionaryAlgorithm:
         self.tau_prim = 1/np.sqrt(2*np.sqrt(self.d))
 
     def iteration(self):
+        """
+        One iteration of unmodified evolutionary algorithm
+        """
         T = self.generate_T()
         R = self.reproduce(T)
         self.P = self.choose_new_population(R)
 
     def generate_T(self):
         """
-        Function generates temporary population, which will be reproduced
-        :return: temporary population
+        Method generates temporary population, which will be reproduced
+        :return: paired temporary population (array sized lambda/2 x 2 x 2d)
         """
         T = np.empty([int(self.lmbd/2), 2, self.d * 2])
         # loop for sampling (with replacement) lambda pairs to reproduce
@@ -43,10 +46,10 @@ class ModifiedEvolutionaryAlgorithm:
 
     def reproduce(self, T):
         """
-        Function creates new individuals from T by mutation
-        :return:
+        Method creates new individuals from T by mutation
+        :param T: paired temporary population (array sized lambda/2 x 2 x 2d)
+        :return: unpaired children population (array sized lambda x 2d)
         """
-
         R = np.empty([self.lmbd, self.d * 2])
 
         for i in range(0, self.lmbd, 2):
@@ -58,6 +61,11 @@ class ModifiedEvolutionaryAlgorithm:
         return R
 
     def pair_children(self, R):
+        """
+        Method puts children in random pairs
+        :param R: unpaired children population (array sized lambda x 2d)
+        :return: paired children population (array sized lambda/2 x 2 x 2d)
+        """
         R_paired = np.empty([int(self.lmbd/2), 2, self.d * 2])
 
         random_ids = np.random.randint(low=0, high=R.shape[0] - 1, size=R.shape[0])
@@ -68,22 +76,36 @@ class ModifiedEvolutionaryAlgorithm:
         return R_paired
 
     def choose_new_population(self, R):
+        """
+        Method creates new population
+        :param R: unpaired children population (array sized lambda x 2d)
+        
+        """
         R_paired = self.pair_children(R)
         return self.choose_mi_best(R_paired)
 
     def choose_mi_best(self, R_paired):
+        """
+        Method chooses mi best individuals from paired children and current population
+        :param R_paired: paired children population (array sized lambda/2 x 2 x 2d)
+        :return: new paired population (array sized lambda/2 x 2 x 2d)
+        """
         population = np.vstack([self.P, R_paired])
         eval_values = np.empty(population.shape[0])
         i = 0
         for individual in population:
-            eval_values[i] = (self.J(individual[0, 0:self.d], self.nCEC) + self.J(individual[1, 0:self.d], self.nCEC)) / 2
+            # Calculating mean as a fitness function for both elements in pair
+            eval_values[i] = -(self.J(individual[0, 0:self.d], self.nCEC) + self.J(individual[1, 0:self.d], self.nCEC)) / 2
             i = i+1
 
         sorted_population = population[np.argsort(eval_values)]
-        #print(population[np.argsort(eval_values)])
         return sorted_population[-int(self.mi/2):]
 
     def choose_best(self):
+        """
+        Method chooses one best individual to end an algorithm
+        :return: best individual (array sized 1*d)
+        """
         # Final population without pairs
         end_pop = np.empty([self.P.shape[0] * 2, 2 * self.d])
         i = 0
@@ -96,12 +118,12 @@ class ModifiedEvolutionaryAlgorithm:
         population = np.empty([end_pop.shape[0], 2 * self.d + 1])
         i = 0
         for individual in end_pop:
-            population[i, 0] = self.J(individual[0:self.d], self.nCEC)
+            population[i, 0] = -self.J(individual[0:self.d], self.nCEC)
             population[i, 1:] = individual
             i = i + 1
         sorted_population = population[np.argsort(population[:, 0])]
 
-        return sorted_population[-1, 1:]
+        return sorted_population[-1, 1:self.d+1]
 
     # @staticmethod
     # def crossover(f, m):
@@ -117,6 +139,11 @@ class ModifiedEvolutionaryAlgorithm:
     #     return x
 
     def mutate(self, x):
+        """
+        Method makes new individual from another individual by mutation
+        :param x: individual to mutate (array sized 1*2d)
+        :return: new individual (array sized 1*2d)
+        """
         ksi = np.random.normal(0, 1)
         mutated_x = np.zeros(len(x))
 
@@ -131,6 +158,10 @@ class ModifiedEvolutionaryAlgorithm:
         return mutated_x
 
     def run(self):
+        """
+        Method runs algorithm
+        :return: best individual (array sized 1*d)
+        """
         for i in range(self.iter_count):
             self.iteration()
 
