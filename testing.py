@@ -2,8 +2,6 @@ import numpy as np
 from ModifiedEvolutionaryAlgorithm import ModifiedEvolutionaryAlgorithm 
 from EvolutionaryAlgorithm import EvolutionaryAlgorithm 
 from cec17_functions import cec17_test_func
-import matplotlib
-matplotlib.pyplot.switch_backend('agg')
 import matplotlib.pyplot as plt
 import time
 
@@ -39,11 +37,12 @@ best_ev = np.zeros([i_count, dimensions])
 best_mod = np.zeros([i_count, dimensions])
 best_ev_val = np.zeros(i_count)
 best_mod_val = np.zeros(i_count)
+time_average_ev = 0
+time_average_mod = 0
 
 for k in range(i_count):
     # TEST
     print("\n/////TEST: {}/////\n".format(k))
-    start = time.clock()
     # Population for one test
     ## Randomization of the initial population for modified evolutionary algorithm (pairs)
     m_random_initial_population = 10000 * np.random.rand(int(initial_population_size / 2), 2, 2 * dimensions)
@@ -57,7 +56,10 @@ for k in range(i_count):
 
     # Evolutionary Algorithm
     evAlg = EvolutionaryAlgorithm(e_random_initial_population, evaluate, CEC_function_number, lambdaa, iteration_count)
+    start = time.clock()
     best_ev[k] = evAlg.run()
+    end = time.clock()
+    time_average_ev = time_average_ev + end - start
     best_ev_val[k] = evaluate(best_ev[k], CEC_function_number)
     print("Evolutionary Algorithm:\n \n\t-Best:")
     print(best_ev[k])
@@ -66,15 +68,20 @@ for k in range(i_count):
 
     # Modified Evolutionary Algorithm
     modEvAlg = ModifiedEvolutionaryAlgorithm(m_random_initial_population, evaluate, CEC_function_number, lambdaa, iteration_count)
+    start = time.clock()
     best_mod[k] = modEvAlg.run()
+    end = time.clock()
+    time_average_mod = time_average_mod + end - start
     best_mod_val[k] = evaluate(best_mod[k], CEC_function_number)
     print("\nModified Evolutionary Algorithm:\n \n\t-Best:")
     print(best_mod[k])
     print("\n\t-Value of evaluate function:")
     print("\t{}".format(best_mod_val[k]))
-    end = time.clock()
-    total = end - start
-    print("{0:02f}s".format(total))
+
+# Calculate averages
+time_average_ev = time_average_ev/i_count
+time_average_mod = time_average_mod/i_count
+
 # Show statistics
 print("\n///////AVERAGES///////\n")
 
@@ -87,6 +94,8 @@ print(np.std(best_ev, axis=0))
 print("\n\t-Average and standard deviation of evaluate function:")
 print("\t{}".format(np.mean(best_ev_val)))
 print("\t{}".format(np.std(best_ev_val)))
+print("\n\t-Average time:")
+print("\t{0:02f}s".format(time_average_ev))
 
 print("\nModified Evolutionary Algorithm:\n \n\t-Average of bests:")
 #plt.plot(best_mod[:, 0], best_mod[:, 1], 'ro')
@@ -96,3 +105,5 @@ print(np.std(best_mod, axis=0))
 print("\n\t-Average and standard deviation of evaluate function:")
 print("\t{}".format(np.mean(best_mod_val)))
 print("\t{}".format(np.std(best_mod_val)))
+print("\n\t-Average time:")
+print("\t{0:02f}s".format(time_average_mod))
