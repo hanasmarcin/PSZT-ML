@@ -2,7 +2,10 @@ import numpy as np
 from ModifiedEvolutionaryAlgorithm import ModifiedEvolutionaryAlgorithm 
 from EvolutionaryAlgorithm import EvolutionaryAlgorithm 
 from cec17_functions import cec17_test_func
+import matplotlib
+matplotlib.pyplot.switch_backend('agg')
 import matplotlib.pyplot as plt
+import time
 
 # Evaluate function from CEC17 functions 
 def evaluate(args,func_num):
@@ -40,7 +43,7 @@ best_mod_val = np.zeros(i_count)
 for k in range(i_count):
     # TEST
     print("\n/////TEST: {}/////\n".format(k))
-
+    start = time.clock()
     # Population for one test
     ## Randomization of the initial population for modified evolutionary algorithm (pairs)
     m_random_initial_population = 10000 * np.random.rand(int(initial_population_size / 2), 2, 2 * dimensions)
@@ -69,14 +72,16 @@ for k in range(i_count):
     print(best_mod[k])
     print("\n\t-Value of evaluate function:")
     print("\t{}".format(best_mod_val[k]))
-
+    end = time.clock()
+    total = end - start
+    print("{0:02f}s".format(total))
 # Show statistics
 print("\n///////AVERAGES///////\n")
 
 print("Evolutionary Algorithm:\n \n\t-Average of bests:")
 
-plt.plot(best_ev[:, 0], best_ev[:, 1], 'ro')
-plt.show()
+#plt.plot(best_ev[:, 0], best_ev[:, 1], 'ro')
+#plt.show()
 print(np.mean(best_ev, axis=0))
 print(np.std(best_ev, axis=0))
 print("\n\t-Average and standard deviation of evaluate function:")
@@ -84,8 +89,8 @@ print("\t{}".format(np.mean(best_ev_val)))
 print("\t{}".format(np.std(best_ev_val)))
 
 print("\nModified Evolutionary Algorithm:\n \n\t-Average of bests:")
-plt.plot(best_mod[:, 0], best_mod[:, 1], 'ro')
-plt.show()
+#plt.plot(best_mod[:, 0], best_mod[:, 1], 'ro')
+#plt.show()
 print(np.mean(best_mod, axis=0))
 print(np.std(best_mod, axis=0))
 print("\n\t-Average and standard deviation of evaluate function:")

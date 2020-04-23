@@ -124,10 +124,10 @@ class ModifiedEvolutionaryAlgorithm:
             i = i + 1
         sorted_population = population[np.argsort(population[:, 0])]
 
-        print("Best from modif")
-        print(sorted_population[:, 1:self.d+1])
-        plt.plot(sorted_population[:, 1], sorted_population[:, 2], 'ro')
-        plt.show()
+        #print("Best from modif")
+        #print(sorted_population[:, 1:self.d+1])
+        #plt.plot(sorted_population[:, 1], sorted_population[:, 2], 'ro')
+        #plt.show()
         return sorted_population[-1, 1:self.d+1]
 
     # @staticmethod

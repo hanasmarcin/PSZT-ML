@@ -115,7 +115,7 @@ class EvolutionaryAlgorithm:
         for i in range(self.iter_count):
             self.iteration()
 
-        print(self.P[:, 0:self.d])
-        plt.plot(self.P[:, 1], self.P[:, 2], 'ro')
-        plt.show()
+        #print(self.P[:, 0:self.d])
+        #plt.plot(self.P[:, 1], self.P[:, 2], 'ro')
+        #plt.show()
         return  self.P[-1, 0:self.d]
