@@ -123,11 +123,13 @@ class ModifiedEvolutionaryAlgorithm:
             population[i, 1:] = individual
             i = i + 1
         sorted_population = population[np.argsort(population[:, 0])]
+        plt.clf()
+        plt.plot(sorted_population[:, 1], sorted_population[:, 2], 'ro')
+        plt.xlabel("x2")
+        plt.ylabel("x1")
+        plt.title("Ostatnia populacja wyznaczona przez \nzmodyfikowany algorytm ewolucyjny")
+        plt.savefig("Mod_last_population_{}.pdf".format(self.nCEC))
 
-        #print("Best from modif")
-        #print(sorted_population[:, 1:self.d+1])
-        #plt.plot(sorted_population[:, 1], sorted_population[:, 2], 'ro')
-        #plt.show()
         return sorted_population[-1, 1:self.d+1]
 
     # @staticmethod

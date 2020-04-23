@@ -26,13 +26,12 @@ while (dimensions != 2 and dimensions != 10 and dimensions != 20 and dimensions 
     print("Error: Test functions are only defined for D=2,10,20,30,50,100.")
     dimensions = int(input("Please enter number of dimensions again: "))
 
-lambdaa = 60
-initial_population_size = 40
+lambdaa = 30
+initial_population_size = 20
 iteration_count = int(1000*dimensions/lambdaa)
-print("iteration count: {}".format(iteration_count))
 
 # Variables for statistics
-i_count = 20
+i_count = 40
 best_ev = np.zeros([i_count, dimensions])
 best_mod = np.zeros([i_count, dimensions])
 best_ev_val = np.zeros(i_count)
@@ -96,6 +95,13 @@ print("\t{}".format(np.mean(best_ev_val)))
 print("\t{}".format(np.std(best_ev_val)))
 print("\n\t-Average time:")
 print("\t{0:02f}s".format(time_average_ev))
+plt.clf()
+plt.plot(best_ev[:, 0], best_ev[:, 1], 'ro')
+plt.xlabel("x2")
+plt.ylabel("x1")
+plt.title("Znalezione minima przez standardowy \nalgorytm ewolucyjny dla funkcji {}. CEC2017".format(CEC_function_number))
+plt.savefig("std_{}_{}_{}_{}.pdf".format(CEC_function_number, dimensions, initial_population_size, lambdaa))
+
 
 print("\nModified Evolutionary Algorithm:\n \n\t-Average of bests:")
 #plt.plot(best_mod[:, 0], best_mod[:, 1], 'ro')
@@ -107,3 +113,9 @@ print("\t{}".format(np.mean(best_mod_val)))
 print("\t{}".format(np.std(best_mod_val)))
 print("\n\t-Average time:")
 print("\t{0:02f}s".format(time_average_mod))
+plt.clf()
+plt.plot(best_mod[:, 0], best_mod[:, 1], 'ro')
+plt.xlabel("x2")
+plt.ylabel("x1")
+plt.title("Znalezione minima przez zmodyfikowany \nalgorytm ewolucyjny dla funkcji {}. CEC2017".format(CEC_function_number))
+plt.savefig("mod_{}_{}_{}_{}.pdf".format(CEC_function_number, dimensions, initial_population_size, lambdaa))

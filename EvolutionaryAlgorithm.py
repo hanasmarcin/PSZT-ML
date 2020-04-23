@@ -114,8 +114,12 @@ class EvolutionaryAlgorithm:
         """
         for i in range(self.iter_count):
             self.iteration()
+        
+        plt.clf()
+        plt.plot(self.P[:, 0], self.P[:, 1], 'ro')
+        plt.xlabel("x2")
+        plt.ylabel("x1")
+        plt.title("Ostatnia populacja wyznaczona przez \nstandardowy algorytm ewolucyjny")
+        plt.savefig("Std_last_population_{}.pdf".format(self.nCEC))
 
-        #print(self.P[:, 0:self.d])
-        #plt.plot(self.P[:, 1], self.P[:, 2], 'ro')
-        #plt.show()
         return  self.P[-1, 0:self.d]
