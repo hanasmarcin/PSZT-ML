@@ -1,3 +1,6 @@
+"""
+Python port for CEC17 functions
+"""
 from ctypes import CDLL, POINTER, c_int, c_double
 import os
 

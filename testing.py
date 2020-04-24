@@ -1,3 +1,9 @@
+"""
+Testing module for evolutionary algorithms
+PSZT 2020
+Marcin Hanas
+Radosław Tuzimek
+"""
 import numpy as np
 from ModifiedEvolutionaryAlgorithm import ModifiedEvolutionaryAlgorithm 
 from EvolutionaryAlgorithm import EvolutionaryAlgorithm 
@@ -28,10 +34,10 @@ while (dimensions != 2 and dimensions != 10 and dimensions != 20 and dimensions 
 
 lambdaa = 30
 initial_population_size = 20
-iteration_count = int(1000*dimensions/lambdaa)
+iteration_count = int(10000*dimensions/lambdaa)
 
 # Variables for statistics
-i_count = 40
+i_count = 25
 best_ev = np.zeros([i_count, dimensions])
 best_mod = np.zeros([i_count, dimensions])
 best_ev_val = np.zeros(i_count)

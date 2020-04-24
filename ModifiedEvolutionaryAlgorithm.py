@@ -1,3 +1,9 @@
+"""
+Modified version of evolutionary algorithm
+PSZT 2020
+Marcin Hanas
+Radosław Tuzimek
+"""
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -54,8 +60,6 @@ class ModifiedEvolutionaryAlgorithm:
         R = np.empty([self.lmbd, self.d * 2])
 
         for i in range(0, self.lmbd, 2):
-            #print(self.lmbd)
-            #print(i)
             R[i, :] = self.mutate(T[int(i/2), 0])
             R[i+1, :] = self.mutate(T[int(i/2), 1])
 
@@ -123,13 +127,6 @@ class ModifiedEvolutionaryAlgorithm:
             population[i, 1:] = individual
             i = i + 1
         sorted_population = population[np.argsort(population[:, 0])]
-        plt.clf()
-        plt.plot(sorted_population[:, 1], sorted_population[:, 2], 'ro')
-        plt.xlabel("x2")
-        plt.ylabel("x1")
-        plt.title("Ostatnia populacja wyznaczona przez \nzmodyfikowany algorytm ewolucyjny")
-        plt.savefig("Mod_last_population_{}.pdf".format(self.nCEC))
-
         return sorted_population[-1, 1:self.d+1]
 
     # @staticmethod

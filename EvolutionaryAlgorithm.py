@@ -1,3 +1,9 @@
+"""
+Standard version of evolutionary algorithm
+PSZT 2020
+Marcin Hanas
+Radosław Tuzimek
+"""
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -115,11 +121,4 @@ class EvolutionaryAlgorithm:
         for i in range(self.iter_count):
             self.iteration()
         
-        plt.clf()
-        plt.plot(self.P[:, 0], self.P[:, 1], 'ro')
-        plt.xlabel("x2")
-        plt.ylabel("x1")
-        plt.title("Ostatnia populacja wyznaczona przez \nstandardowy algorytm ewolucyjny")
-        plt.savefig("Std_last_population_{}.pdf".format(self.nCEC))
-
         return  self.P[-1, 0:self.d]
