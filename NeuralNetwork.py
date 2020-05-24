@@ -9,8 +9,8 @@ def activation_fun(data):
     :return: vector with activation function values for each neuron in one layer
     """
 
-    # result = [2/(1 + np.exp2(-lmbd*value)) - 1 for value in data]
-    result = [(2/np.pi) * np.arctan(value) for value in data]
+    result = [2/(1 + np.exp2(-0.2*value)) - 1 for value in data]
+    # result = [(2/np.pi) * np.arctan(value) for value in data]
     return np.asarray(result)
 
 
@@ -36,10 +36,10 @@ def activation_fun_dv(data):
     :param data: ector with weighted sum of inputs for each neuron in one layer
     :return: vector with activation function derivative values for each neuron in one layer
     """
-    result = [(2/np.pi)/(1 + value**2) for value in data]
-    return np.asarray(result)
-    # data_act_val = activation_fun(data, lmbd)
-    # return 0.5 * (np.ones(data_act_val.shape) - np.power(data_act_val, 2))
+    # result = [(2/np.pi)/(1 + value**2) for value in data]
+    # return np.asarray(result)
+    data_act_val = activation_fun(data)
+    return 0.5 * (np.ones(data_act_val.shape) - np.power(data_act_val, 2))
 
 
 class NeuralNetwork:
@@ -123,44 +123,45 @@ class NeuralNetwork:
             layers_dq_dth.insert(0, dq_dth)
 
         for layer_id in range(len(self.neuron_layers)):
-            self.neuron_layers[layer_id] -= 1 * layers_dq_dth[layer_id]
+            self.neuron_layers[layer_id] -= 0.05 * layers_dq_dth[layer_id]
 
         return sum(pow(self.layers_output[-1] - desired_output, 2))
 
 
-# xy = np.asarray([-2, -1, 0, 1, 2])
-# a = activation_fun(xy, 2)
-# print(activation_fun_dv(a))
-nn = NeuralNetwork(2, np.asarray([10, 1]))
-# inp = np.asarray([1])
-# outp = np.asarray([6, 2, 4, 8, 10])
-arr = np.loadtxt("tiny.txt")
-print(arr)
-for k in range(1000):
-    suma = 0
-    for row in arr:
-        suma += nn.propagate(row[1:], 1 if row[0] == 1 else -1)
-    for row in arr:
-        # print(row[0])
-        print(nn.run(row[1:]))
-    print(suma)
-    if suma < 0.1:
-        break
-
-print(k)
-print(suma)
-# for k in range(20):
+# # xy = np.asarray([-2, -1, 0, 1, 2])
+# # a = activation_fun(xy, 2)
+# # print(activation_fun_dv(a))
+# nn = NeuralNetwork(2, np.asarray([10, 1]))
+# # inp = np.asarray([1])
+# # outp = np.asarray([6, 2, 4, 8, 10])
+# arr = np.loadtxt("tiny.txt")
+# print(arr)
+# for k in range(1000):
 #     suma = 0
-#     for i in range(100):
-#         for j in range(100):
-#             inp = np.asarray([i, j])
-#             outp = np.asarray([4 if j > i else 0, 3 if 2*j > i else 1])
-#             suma += nn.propagate(inp, outp)
+#     for row in arr:
+#         suma += nn.propagate(row[1:], 1 if row[0] == 1 else -1)
+#     for row in arr:
+#         # print(row[0])
+#         nn.run(row[1:])
 #     print(suma)
-#     print(nn.run(np.asarray([2, 3])))
-
-
-# b = np.asarray([[1, 2, 3], [4, 5, 6]])
-# c = np.asarray([-1, 2])
-
-# print(b@np.append(c, 1))
+#     if suma < 0.1:
+#         break
+#
+# print(k)
+# print(suma)
+# print(np.ones([5, 5]) * np.asarray([1, 2, 3, 4, 5]))
+# # for k in range(20):
+# #     suma = 0
+# #     for i in range(100):
+# #         for j in range(100):
+# #             inp = np.asarray([i, j])
+# #             outp = np.asarray([4 if j > i else 0, 3 if 2*j > i else 1])
+# #             suma += nn.propagate(inp, outp)
+# #     print(suma)
+# #     print(nn.run(np.asarray([2, 3])))
+#
+#
+# # b = np.asarray([[1, 2, 3], [4, 5, 6]])
+# # c = np.asarray([-1, 2])
+# #
+# # print(b@np.append(c, 1))
